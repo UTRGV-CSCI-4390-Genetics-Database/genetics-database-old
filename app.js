@@ -5,7 +5,7 @@ app.use( express.static('public'));
 /*app.use('/', serveIndex('public'))*/
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname +"/public/search.html");
+    res.sendFile(__dirname +"/public/index.html");
 });
 app.get('/nowy', (req, res) => {
     res.sendFile(__dirname +"/public/moj.html");

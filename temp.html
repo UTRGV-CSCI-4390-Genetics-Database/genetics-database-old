@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>JavaScript Statements</h2>
+
+<p>Multiple statements on one line is allowed.</p>
+
+<p id="demo1"></p>
+
+<script>
+
+var sortByProperty = function (property) {
+    return function (x, y) {
+        return ((x[property] === y[property]) ? 0 : ((x[property] > y[property]) ? 1 : -1));
+    };
+};
+var arr = [{"rel_score": 0.21, "url":"https://en.", "title":"wiki-Cat", "excerpt":"The cat "},
+    {"rel_score": 0.33, "url":"https://www.cat.com/", "title":"Cat - CATERPILLAR WORLDWIDE", "excerpt":"GENUINE ."},
+    {"rel_score": 0.13, "url":"https://www.h", "title":"Aats ", "excerpt":"Cats1 "},
+    {"rel_score": 0.14, "url":"https://www.hu", "title":"Cats and Humanes", "excerpt":"Cats2 "},
+    {"rel_score": 0.15, "url":"https://www.hum", "title":"Cats and Humanes", "excerpt":"Cats3 "}
+]
+
+var a, b, c;
+a = 5; b = 6; c = a + b;
+arr.sort(sortByProperty('title'));
+function addScore(arr){
+    for(var i = 0; i < (arr.length-1); i++ ){
+        if(arr[i].title == arr[i+1].title){
+            var score = arr[i].rel_score + arr[i+1].rel_score;
+            arr[i+1].rel_score = score;
+            if (i > -1) {
+                arr.splice(i, 1);
+            }    
+        }
+    }
+}
+addScore(arr)
+console.log(arr);
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Genetics Database</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1>Genetics Database Application</h1>
+        <h3>The Computer Science Department - University of Texas Rio Grande Valley </h3>
+
+        <div class="h-divider1"></div> 
+        <div class="h-divider2"></div> 
+
+        <div class="row">
+          <div class="col" style="background-color:rgb(234, 238, 226);"> 
+            <div class="dropdown">
+                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Individual</button>
+                <div class="dropdown-menu" id = "ind">
+                  <ul class="dropdown-item" id = "ind-0" >    
+                    <form > 
+                       <input type="text" class="form-control"  placeholder= "Project name" id = "indN-0"> 
+                    </form> 
+                   </ul>
+                </div>
+            </div>
+     </div>
+
+          <div class="col" style= "background-color:rgb(237, 240, 192);"> 
+            <div class="dropdown">
+                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Demographics</button>
+                <div class="dropdown-menu" id = "demo">
+                  <ul class="dropdown-item" id = "demo-0" >    
+                    <form > 
+                       <input type="text" class="form-control"  placeholder= "Age" id ="demoN-0"> 
+                    </form> 
+                   </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <div class="h-divider"></div> 
+
+  <div class="row">
+      <div class="col" style ="background-color:rgb(234, 238, 226);">
+        <div class="dropdown">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Biological Measurements</button>
+            <div class="dropdown-menu " id = "bio">
+              <ul class="dropdown-item" id = "bio-0" >    
+                <form > 
+                   <input type="text" class="form-control"  placeholder= "BMI" id = "bioN-0"> 
+                </form> 
+               </ul>
+            </div>
+          </div>
+    </div>
+  
+      <div class="col" style= "background-color:rgb(237, 240, 192);">
+        <div class="dropdown">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Medical History</button>
+            <div class="dropdown-menu" id = "medical">
+              <div class="dropdown-item" id = "medical-0">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input"  value= 'Abortion' name="medical[]" >
+                    <label class="form-check-label">Abortion</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col" style= "background-color:rgb(216, 241, 199);"> 
+          <div class="dropdown">
+               <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">SNPs</button>
+              <div class="dropdown-menu" id = "snp_s">
+                <ul class="dropdown-item" id = "snp_s-0" >    
+                  <form > 
+                     <input type="text" class="form-control" placeholder= "Chromosome Name" id ="snp_sN-0"> 
+                  </form> 
+                 </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+  <div class="h-divider"></div> 
+
+  <div class="row">
+    <div class="col" style="background-color:rgb(237, 240, 192);">
+      <div class="dropdown">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Psychiatric Disorders</button>
+          <div class="dropdown-menu" id = "psychiatric">
+            <div class="dropdown-item" id = "psychiatric-0">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="Agoraphobia" name="psychiatric[]">
+                <label class="form-check-label">Agoraphobia</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   <div class="col" style="background-color:rgb(216, 241, 199);">
+      <div class="dropdown">
+          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Ancestry Markers</button>
+          <div class="dropdown-menu" id = "ancestry">
+            <div class="dropdown-item" id = "ancestry-0">
+              <div class="form-check">
+                  <input type="checkbox" class="form-check-input"  value="rs2534636-a1" name="ancestry[]">
+                  <label class="form-check-label" >rs2534636-a1</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="h-divider3"></div> 
+  <div class="h-divider4"></div> 
+  <div> <button type="button" class="btn btn-primary" id = "b">Primary</button> </div>
+</div>
+
+
+<script src="data.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

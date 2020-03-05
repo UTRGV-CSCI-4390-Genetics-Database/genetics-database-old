@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Database</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div>
+    <p>jerzy majka </p>
+    <p id = "NN">beata </p>
+  </div>
+  <input type="checkbox" name="Group[]" value="jerzy">
+  <input type="checkbox" name="Group[]"  value="edaward">
+  <input type="checkbox" name="Group[]"  value="majka">
+  <input class="btn btn-primary" type="button" value="Submit" id = "btn">
+
+<script >
+  var ja = $('div');
+  var arr = [];
+  $("#btn").click(function(){
+  ja.find("#NN").text("mirek");
+  arr = $("input[name='Group[]']:checked").map(function() { 
+            return this.value; 
+          }).get();
+          console.log(arr);
+
+        });
+  
+</script>
+</body>
+</html>
