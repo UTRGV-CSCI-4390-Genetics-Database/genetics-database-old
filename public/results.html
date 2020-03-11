@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Genetics Database</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>	
+</head>
+<body>
+    <div class="container-fluid">
+        <h1>Genetics Database Application</h1>
+        <h3>The results </h3>
+         <table >  <tr class = "temp" style="color:rgb(75, 3, 3)"> <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+    
+        <h3   class = "results" style="background-color:rgb(234, 238, 226);"> Individual </h3>
+        <table id = "ind">  <tr id = "ind-0" > <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+    
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+
+        <h3   class = "results" style= "background-color:rgb(237, 240, 192);">Demographics </h3>
+        <table id = "dem">  <tr id = "dem-0" > <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+
+        <h3   class = "results"  style= "background-color:rgb(216, 241, 199);">Biological Measurements</h3>
+        <table id = "bio">  <tr id = "bio-0" > <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+
+        <h3   class = "results" style="background-color:rgb(234, 238, 226);"> Medical History </h3>
+        <table id = "med">  <tr id = "med-0" > <th class = 'th1'></th> <th class = 'th2'></th> <th class = 'th3'></th></tr> </table>
+
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+
+        <h3   class = "results" style= "background-color:rgb(237, 240, 192);"> SNPs </h3>
+        <table id = "snp">  <tr id = "snp-0" > <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+
+        <h3   class = "results" style= "background-color:rgb(216, 241, 199);"> Psychiatric Disorders </h3>
+        <table id = "psy">  <tr id = "psy-0" > <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+
+        <h3   class = "results" style="background-color:rgb(234, 238, 226);"> Ancestry Markers </h3>
+        <table id = "anc">  <tr id = "anc-0" > <th class = 'th1'></th> <th class = 'th2'></th><th class = 'th3'></th></tr> </table>
+
+        <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+  <div class="row"  >
+    <div class="col" align="center" >
+      <form action="/new" method="POST">
+        <button type="submit" class="btn btn-outline-info btn-lg" id = 'b2' style="background-color:rgb(241, 237, 223);">Print Results</button>
+      </form>
+     </div>
+   <div class="col"></div>
+    <div class="col" align="center">
+        <form action="/" method="GET">
+           <button type="submit" class="btn btn-outline-info btn-lg"  style="background-color:rgb(241, 237, 223);">New Search</button> 
+        </form>
+    </div>
+  </div>
+  </div>
+</div>
+<script src="data.js"></script>
+<script src="results.js"></script>
+</body>
+</html>

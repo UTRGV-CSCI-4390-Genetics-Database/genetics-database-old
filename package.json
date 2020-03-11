@@ -7,12 +7,17 @@
   },
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon idnex"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "fs": "0.0.1-security",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.2",
     "serve-index": "^1.9.1"
   },
   "devDependencies": {

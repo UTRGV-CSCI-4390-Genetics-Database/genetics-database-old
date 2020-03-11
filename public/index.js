@@ -8,7 +8,14 @@ function objToStr(target, key, val){
       tempObj[key] = val;
       Object.assign(target, tempObj);
   }
-}
+}    
+function newTab() {
+      var form = document.createElement("form");
+      form.method = "GET";
+      form.action = "/results";
+      document.body.appendChild(form);
+      form.submit();
+ }
 $(document).ready(function(){
 
   myVar = $("#ind-0").clone();
@@ -62,12 +69,32 @@ $(document).ready(function(){
 
   myVar = $("#ancestry-0").clone(true);
   for(var i = 1; i < ancestry.length; i++){
-    myVar.attr("id", "psychiatric-" + i);
-    myVar.find('input').attr("value", psychiatric[i]);
+    myVar.attr("id", "ancestry-" + i);
+    myVar.find('input').attr("value", ancestry[i]);
     myVar.find('label').text(ancestry[i]);
     $("#ancestry").append(myVar.clone(true));
   }
+
+  $("#medical1").click(function(){
+    $("input[name='medical[]']").prop("checked", true);
+  });
+  $("#medical0").click(function(){
+    $("input[name='medical[]']").prop("checked", false);
+  });
+
+  $("#ancestry1").click(function(){
+    $("input[name='ancestry[]']").prop("checked", true);
+  });
+  $("#ancestry0").click(function(){
+    $("input[name='ancestry[]']").prop("checked", false);
+  });
   
+  $("#psychiatric1").click(function(){
+    $("input[name='psychiatric[]']").prop("checked", true);
+  });
+  $("#psychiatric0").click(function(){
+    $("input[name='psychiatric[]']").prop("checked", false);
+  });
   $("#b").click(function(){
     var myStr = "indN-";
     for(var i = 0; i < ind.length; i++){
@@ -101,7 +128,17 @@ $(document).ready(function(){
     myObj.psychiatric = $("input[name='psychiatric[]']:checked").map(function() { 
       return this.value; 
     }).get();
-    console.log(myObj);     
+  
+    $.ajax({
+      type: 'POST',
+      data: JSON.stringify(myObj),
+      contentType: 'application/json',
+      url: '/',						
+      success: function(data) {
+          console.log('success');
+      }
+    });
+    newTab();
   });
 });
 
