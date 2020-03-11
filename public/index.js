@@ -116,7 +116,12 @@ $(document).ready(function(){
       var val = $('#'+ myStr + i).val();
       objToStr(myObj.bio, key, val)
     }
-
+    var myStr = "snp_sN-";
+    for(var i = 0; i < snp_s.length; i++){
+      var key = snp_s[i];
+      var val = $('#'+ myStr + i).val();
+      objToStr(myObj.snp_s, key, val)
+    }
     myObj.medical = $("input[name='medical[]']:checked").map(function() { 
       return this.value; 
     }).get();
