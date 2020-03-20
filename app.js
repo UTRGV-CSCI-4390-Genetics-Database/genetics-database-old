@@ -31,7 +31,7 @@ app.post('/', function(req, res) {
   }
 
   app.post('/new', function(req, res){
-    res.send("na dzisiaj wystarczy");
+    res.send("witam dwa tygodnie pozniej");
   });
 
   app.get('/results', function(req, res){
