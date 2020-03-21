@@ -195,7 +195,7 @@ app.post('/', async function(req, res){
     }
     totalFromTabelRusults(dataBaseRequest, newObj);
     console.log(newObj);
-
+    res.send('spokojnie tylko spokojnie')
 });
 app.get('/results', function(req, res){
     res.sendFile(`${__dirname}/public/results.html`);
