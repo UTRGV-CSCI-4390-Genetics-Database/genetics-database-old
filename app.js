@@ -204,9 +204,6 @@ app.get('/results', function(req, res){
 app.listen(PORT, function(){console.log(`severe started on port ${PORT}`)});
 
 app.get('/new', async function(req, res){
-    for(i = 0; i < dataBaseRequest.length; i++){
-        console.log(await read(dataBaseRequest[i]));
-    }
-    res.send('spokojnie tylko spokojnie')
+    res.send(newObj);
  })
 connect()
