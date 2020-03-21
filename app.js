@@ -50,17 +50,19 @@ var newObj = {};
 var dataBaseRequest = [];
 
 const oneRequst = function(obj){
-    var temp  = "";
+    var temp2  = "";
     for (let [key, value] of Object.entries(obj)){
+        var temp1 = `SELECT COUNT(*) FROM ${key} WHERE`
         var tempObj = {};
         for(let[key1, value1] of Object.entries(obj[key])){
-            var tempArr = Array(4);
+            var tempArr = [0, 0, 0, 0];
             if(value1[0] =='text' || value1[0] =='char(1)'){
                 if(value1[1] != ''){
                 tempArr[0] = value1[1];
-                temp = `SELECT COUNT(*) FROM ${key} WHERE ${key1} ` + "= '"+value1[1]+"'"
+                temp2 = ` ${key1} ` + "= '"+value1[1]+"'"
+                temp = temp1+temp2;
                 dataBaseRequest.push(temp);
-                tempArr[1]=temp;
+                tempArr[1]=temp2;
                 tempArr[3]=dataBaseRequest.length;
                 tempObj[key1] = tempArr;
                 }
@@ -68,9 +70,10 @@ const oneRequst = function(obj){
             else if(value1[0] =='boolean'){
                 if(value1[1] == true){
                 tempArr[0] = value1[1];
-                temp = `SELECT COUNT(*) FROM ${key} WHERE ${key1}` + "= true";
+                temp2 = ` ${key1}` + " = true";
+                temp = temp1+temp2;
                 dataBaseRequest.push(temp);
-                tempArr[1]=temp;
+                tempArr[1]=temp2;
                 tempArr[3]= dataBaseRequest.length;
                 tempObj[key1] =tempArr;
                 }
@@ -78,9 +81,10 @@ const oneRequst = function(obj){
             else if(value1[0] =='integer' || value1[0] =='smallint' || value1[0] =='real' || value1[0] =='bigint'){
                 if(value1[1] < value1[2]){
                 tempArr[0] = value1[1];
-                temp = `SELECT COUNT(*) FROM ${key} WHERE ${key1} BETWEEN ${value1[1]} AND ${value1[2]}`;
+                temp2 = ` ${key1} BETWEEN ${value1[1]} AND ${value1[2]}`;
+                temp = temp1+temp2;
                 dataBaseRequest.push(temp);
-                tempArr[1]=temp;
+                tempArr[1]=temp2;
                 tempArr[2]=value1[2];
                 tempArr[3]=dataBaseRequest.length;
                 tempObj[key1] = tempArr;
@@ -91,14 +95,15 @@ const oneRequst = function(obj){
                 tempArr[0] = value1[1];
                 temp = `SELECT COUNT(*) FROM ${key} WHERE ${key1}` + " BETWEEN '"+value1[1]+"' AND '"+value1[2]+"'";
                 dataBaseRequest.push(temp);
-                tempArr[1]=temp;
+                tempArr[1]=temp2;
                 tempArr[2]=value1[2];
                 tempArr[3]=dataBaseRequest.length;
                 tempObj[key1] = tempArr;
                 }
             }
         }
-        tempObj['Total']= Array(4);
+        tempArr = [0, 0, 0, 0]
+        tempObj['Total']=  tempArr;
         newObj[key]=tempObj;
     }
 }
@@ -106,7 +111,7 @@ const oneRequst = function(obj){
 const putResultsToNewObje = function(arr, obj){
     for (let [key, value] of Object.entries(obj)){
         for(let[key1, value1] of Object.entries(obj[key])){
-            if(value1[3] != null){
+            if(value1[3] != 0){
                 var i = value1[3];
                 value1[3] = arr[i-1];
             }
@@ -115,18 +120,55 @@ const putResultsToNewObje = function(arr, obj){
     }
 } 
 
-const totalFromTabel = function(arr, obj){
-    arr = [];
-    str = {}
+const totalFromTabel = function(obj){
+    var arr = [];
+    
     for (let [key, value] of Object.entries(obj)){
-        str = key;
-        for(let[key1, value1] of Object.entries(obj[key])){
-            if(value1[1] != null){
-                str += value1[1];
+        var str = "";
+        str = `SELECT COUNT(*) FROM ${key} WHERE`;
+        if(key == 'psychiatric_disorders' || key == 'medical_history'){
+            for(let[key1, value1] of Object.entries(obj[key])){
+                if(value1[1] != 0){
+                    {
+                        if(value1[3]>0){
+                            str += value1[1] + " OR ";
+                        }   
+                    }
+                }
             }
+            arr.push(str.substring(0, str.length - 4));
         }
-    arr.push(str);
+        else{
+            for(let[key1, value1] of Object.entries(obj[key])){
+                if(value1[1] != 0){
+                    {
+                        if(value1[3]==0){
+                            str = "";
+                            break;
+                        }
+                        else{
+                            str += value1[1] + " AND ";
+                        }
+                        str += value1[1] + " AND ";
+                    }
+                }
+            }
+            arr.push(str.substring(0, str.length - 5));
+        }
     }
+    return arr;
+}    
+ 
+
+const totalFromTabelRusults = function(arr, obj){
+    obj.individuals.Total[3] = arr[0];
+    obj.projects.Total[3] = arr[1];
+    obj.project_enrollments.Total[3] = arr[2];
+    obj.demographics.Total[3] = arr[3];
+    obj.biological_measurements.Total[3] = arr[4];
+    obj.psychiatric_disorders.Total[3] = arr[5];
+    obj.medical_history.Total[3] = arr[6];
+    obj.markers.Total[3] = arr[7];
 }
 
 app.get('/', function(req, res){
@@ -141,12 +183,20 @@ app.post('/', async function(req, res){
         dataBaseRequest[i] = await read(dataBaseRequest[i]);
        
     }
-    console.log('wszystko gotowe')
     putResultsToNewObje(dataBaseRequest, newObj);
-    totalFromTabel(dataBaseRequest, newObj);
+    dataBaseRequest = totalFromTabel(newObj)
+    for(i = 0; i < dataBaseRequest.length; i++){
+        if(dataBaseRequest[i].includes("WHERE")){
+            dataBaseRequest[i] = await read(dataBaseRequest[i]);
+        }
+        else{
+            dataBaseRequest[i] =0;
+        }
+    }
+    totalFromTabelRusults(dataBaseRequest, newObj);
     console.log(newObj);
-     console.log(dataBaseRequest);
-   });
+
+});
 app.get('/results', function(req, res){
     res.sendFile(`${__dirname}/public/results.html`);
   });
