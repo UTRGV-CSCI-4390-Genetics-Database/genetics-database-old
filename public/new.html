@@ -11,16 +11,13 @@
     <title>Genetics Database</title>
   </head>
 <body>
-  <h1>Genetics Database Application </h1>
+  <h1 class="results">Genetics Database New Record </h1>
   <div class="h-divider1"></div>  <div class="h-divider4"></div> 
   <div id = "char" class="form-group row temp"> <label class="col-2 col-form-label">Text</label> <div class="col-1"> <input maxlength="1" class="form-control" type="text"> </div> </div>
   <div id = "text" class="form-group row temp"> <label class="col-2 col-form-label">Text</label> <div class="col-3"> <input class="form-control" type="text"> </div> </div>
-  <div id = "date" class="form-group row temp"> <label class="col-2 col-form-label">Date</label><div class="col-2"> <input id = "in1" class="form-control" type="date"></div>
-  <span> to </span> <div class="col-2"> <input id = "in2" class="form-control" type="date"> </div> </div>
-  <div id="number" class="form-group row temp"> <label class="col-2 col-form-label">Number</label><div class="col-2"> <input id = "in1" class="form-control" type="number" min = '0'></div>
-  <span> to </span> <div class="col-2"> <input id = "in2" class="form-control" type="number"  min = '0'> </div> </div>
-  <div id="real" class="form-group row temp"> <label class="col-2 col-form-label">Number</label><div class="col-2"> <input id = "in1" class="form-control" type="number" step = '0.01' min = '0'></div>
-  <span> to </span> <div class="col-2"> <input id = "in2" class="form-control" type="number" step = '0.01' min = '0'> </div> </div>
+  <div id = "date" class="form-group row temp"> <label class="col-2 col-form-label">Date</label><div class="col-2"> <input id = "in1" class="form-control" type="date"></div></div>
+  <div id="number" class="form-group row temp"> <label class="col-2 col-form-label">Number</label><div class="col-2"> <input id = "in1" class="form-control" type="number" min = '0'></div></div>
+  <div id="real" class="form-group row temp"> <label class="col-2 col-form-label">Number</label><div class="col-2"> <input id = "in1" class="form-control" type="number" step = '0.01' min = '0'></div></div>
   <div id = "check" class="form-check temp" ><input type="checkbox" class="form-check-input" ><label class="form-check-label" >Check me out</label></div></div>
   <div id="accordion">
     <div class="card temp">
@@ -34,8 +31,8 @@
   <div class="h-divider1"></div>  <div class="h-divider4"></div>
  <div class="row"  >
     <div class="col" align="center" >
-      <form action="/new" method="GET">
-        <button type="submit" class="btn btn-outline-info btn-lg" id = 'b2'>New Record</button>
+      <form action="/" method="GET">
+        <button type="submit" class="btn btn-outline-info btn-lg">New Search</button>
       </form>
      </div>
    <div class="col"></div>
@@ -46,7 +43,7 @@
   </div>
     <!-- Optional JavaScript -->
     <script src="data.js"></script>
-    <script src="index.js"></script>
+    <script src="new.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

@@ -3,17 +3,13 @@ var fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 5000
 const path = require('path');
+bodyParser = require('body-parser');
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}))
-
+app.use(express.urlencoded({extended: false}))  
+app.set('view engine', 'ejs');
 const Client = require('pg').Client;
-const client1 = new Client({
-    user: 'postgres',
-    password: '1234',
-    host: 'localhost',
-    database: 'jerzy'
-});
 
 const client = new Client({
     user: 'genetics_user',
@@ -22,10 +18,15 @@ const client = new Client({
     database: 'genetics'
 });
 
-const saveToPublicFolder = function(person, callback){
-    fs.writeFile('./public/data.json', JSON.stringify(person), callback);
-  }
-
+async function disconnect()
+{  console.log('szlag mnie trafi')
+    client.end(function(err) {
+    console.log('client has disconnected. gdzie')
+    if (err) {
+      console.log('error during disconnection', err.stack)
+    }
+  })
+} 
 async function read(text){
     try {
     const results = await client.query(text);
@@ -47,13 +48,15 @@ async function connect() {
 }
 
 var newObj = {};
-var dataBaseRequest = [];
+var request_to_db = [];
 
 const oneRequst = function(obj){
+    var temp1 = "";
     var temp2  = "";
     for (let [key, value] of Object.entries(obj)){
-        var temp1 = `SELECT COUNT(*) FROM ${key} WHERE`
+        temp1 = `SELECT COUNT(*) FROM ${key} WHERE`
         var tempObj = {};
+        tempObj['Total']=  -2;
         for(let[key1, value1] of Object.entries(obj[key])){
             var tempArr = [0, 0, 0, 0];
             if(value1[0] =='text' || value1[0] =='char(1)'){
@@ -61,10 +64,11 @@ const oneRequst = function(obj){
                 tempArr[0] = value1[1];
                 temp2 = ` ${key1} ` + "= '"+value1[1]+"'"
                 temp = temp1+temp2;
-                dataBaseRequest.push(temp);
+                request_to_db.push(temp);
                 tempArr[1]=temp2;
-                tempArr[3]=dataBaseRequest.length;
+                tempArr[3]=request_to_db.length;
                 tempObj[key1] = tempArr;
+                tempObj['Total']=  -1;
                 }
             }
             else if(value1[0] =='boolean'){
@@ -72,10 +76,11 @@ const oneRequst = function(obj){
                 tempArr[0] = value1[1];
                 temp2 = ` ${key1}` + " = true";
                 temp = temp1+temp2;
-                dataBaseRequest.push(temp);
+                request_to_db.push(temp);
                 tempArr[1]=temp2;
-                tempArr[3]= dataBaseRequest.length;
+                tempArr[3]= request_to_db.length;
                 tempObj[key1] =tempArr;
+                tempObj['Total']=  -1;
                 }
             }
             else if(value1[0] =='integer' || value1[0] =='smallint' || value1[0] =='real' || value1[0] =='bigint'){
@@ -83,29 +88,31 @@ const oneRequst = function(obj){
                 tempArr[0] = value1[1];
                 temp2 = ` ${key1} BETWEEN ${value1[1]} AND ${value1[2]}`;
                 temp = temp1+temp2;
-                dataBaseRequest.push(temp);
+                request_to_db.push(temp);
                 tempArr[1]=temp2;
                 tempArr[2]=value1[2];
-                tempArr[3]=dataBaseRequest.length;
+                tempArr[3]=request_to_db.length;
                 tempObj[key1] = tempArr;
+                tempObj['Total']=  -1;
                 }
             }
             else if(value1[0] == 'date'){
                 if(value1[1] < value1[2]){
                 tempArr[0] = value1[1];
-                temp = `SELECT COUNT(*) FROM ${key} WHERE ${key1}` + " BETWEEN '"+value1[1]+"' AND '"+value1[2]+"'";
-                dataBaseRequest.push(temp);
+                temp2 = ` ${key1} BETWEEN '${value1[1]}' AND '${value1[2]}'`;
+                temp = temp1+temp2;
+                request_to_db.push(temp);
                 tempArr[1]=temp2;
                 tempArr[2]=value1[2];
-                tempArr[3]=dataBaseRequest.length;
+                tempArr[3]=request_to_db.length;
                 tempObj[key1] = tempArr;
+                tempObj['Total']=  -1;
                 }
             }
         }
-        tempArr = [0, 0, 0, 0]
-        tempObj['Total']=  tempArr;
         newObj[key]=tempObj;
     }
+    return request_to_db
 }
 
 const putResultsToNewObje = function(arr, obj){
@@ -118,42 +125,35 @@ const putResultsToNewObje = function(arr, obj){
 
         }
     }
+    
 } 
 
 const totalFromTabel = function(obj){
     var arr = [];
-    
     for (let [key, value] of Object.entries(obj)){
+        console.log(value['Total'])
         var str = "";
-        str = `SELECT COUNT(*) FROM ${key} WHERE`;
-        if(key == 'psychiatric_disorders' || key == 'medical_history'){
-            for(let[key1, value1] of Object.entries(obj[key])){
-                if(value1[1] != 0){
-                    {
-                        if(value1[3]>0){
-                            str += value1[1] + " OR ";
-                        }   
-                    }
-                }
-            }
-            arr.push(str.substring(0, str.length - 4));
+        if(value['Total'] == -2){
+            arr.push(key)
         }
         else{
-            for(let[key1, value1] of Object.entries(obj[key])){
-                if(value1[1] != 0){
-                    {
-                        if(value1[3]==0){
-                            str = "";
-                            break;
-                        }
-                        else{
-                            str += value1[1] + " AND ";
-                        }
-                        str += value1[1] + " AND ";
+            str = `SELECT COUNT(*) FROM ${key} WHERE`;
+            if(key == 'psychiatric_disorders' || key == 'medical_history'){
+                for(let[key1, value1] of Object.entries(obj[key])){
+                        if(value1[1] && value1[3]>0){
+                            str += value1[1] + " OR";
+                        }   
+                    }
+                    arr.push(str.substring(0, str.length - 3));   
+                }                      
+            else{
+                for(let[key1, value1] of Object.entries(obj[key])){
+                    if(value1[1]){
+                        str += value1[1] + " AND";
                     }
                 }
+                arr.push(str.substring(0, str.length - 4));
             }
-            arr.push(str.substring(0, str.length - 5));
         }
     }
     return arr;
@@ -161,49 +161,54 @@ const totalFromTabel = function(obj){
  
 
 const totalFromTabelRusults = function(arr, obj){
-    obj.individuals.Total[3] = arr[0];
-    obj.projects.Total[3] = arr[1];
-    obj.project_enrollments.Total[3] = arr[2];
-    obj.demographics.Total[3] = arr[3];
-    obj.biological_measurements.Total[3] = arr[4];
-    obj.psychiatric_disorders.Total[3] = arr[5];
-    obj.medical_history.Total[3] = arr[6];
-    obj.markers.Total[3] = arr[7];
+    obj.individuals.Total = arr[0];
+    obj.projects.Total = arr[1];
+    obj.project_enrollments.Total = arr[2];
+    obj.demographics.Total = arr[3];
+    obj.biological_measurements.Total = arr[4];
+    obj.psychiatric_disorders.Total = arr[5];
+    obj.medical_history.Total = arr[6];
+    obj.markers.Total = arr[7];
 }
 
 app.get('/', function(req, res){
     res.sendFile(`${__dirname }/public/index.html`);
 })
 
-app.post('/', async function(req, res){
-    dataBaseRequest = [];
-    var obj = req.body;
-    oneRequst(obj); 
-    for(i = 0; i < dataBaseRequest.length; i++){
-        dataBaseRequest[i] = await read(dataBaseRequest[i]);
+app.post('/results', async function(req, res){
+    //connect()
+    var obj = req.body.obj;
+    //console.log(JSON.parse(obj)); 
+    var req_to_db = oneRequst(JSON.parse(obj)); 
+    for(i = 0; i < req_to_db.length; i++){
+        req_to_db[i] = await read(req_to_db[i]);
        
     }
-    putResultsToNewObje(dataBaseRequest, newObj);
-    dataBaseRequest = totalFromTabel(newObj)
-    for(i = 0; i < dataBaseRequest.length; i++){
-        if(dataBaseRequest[i].includes("WHERE")){
-            dataBaseRequest[i] = await read(dataBaseRequest[i]);
+    putResultsToNewObje(req_to_db, newObj);
+    console.log(newObj);
+    var r_to_db = totalFromTabel(newObj)
+    console.log(r_to_db);
+    for(i = 0; i < r_to_db.length; i++){
+        if(r_to_db[i].includes("WHERE")){
+            r_to_db[i] = await read(r_to_db[i]);
         }
         else{
-            dataBaseRequest[i] =0;
+            r_to_db[i] = -7;
         }
     }
-    totalFromTabelRusults(dataBaseRequest, newObj);
+    totalFromTabelRusults(r_to_db, newObj);
     console.log(newObj);
-    res.send('spokojnie tylko spokojnie')
+    res.render('pages/index', {
+        to_ejs: newObj,
+    });
+
 });
-app.get('/results', function(req, res){
-    res.sendFile(`${__dirname}/public/results.html`);
+app.get('/new', function(req, res){
+    res.sendFile(`${__dirname}/public/new.html`);
   });
 
-app.listen(PORT, function(){console.log(`severe started on port ${PORT}`)});
-
-app.get('/new', async function(req, res){
-    res.send(newObj);
- })
 connect()
+
+app.listen(PORT, function(){
+    console.log(`severe started on port ${PORT}`)
+})

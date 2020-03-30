@@ -1,0 +1,49 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<main>
+    <div class="container-fluid">
+        <h1>Genetics Database Application</h1>
+        <h3>The results </h3>
+        <% for (let [key, value] of Object.entries(to_ejs)){%>
+            <div class="h-divider1"></div>  <div class="h-divider4"></div>    
+            <h2 class="results"><%= key %> </h2>
+            <div class="h-divider1"></div>  <div class="h-divider4"></div> 
+            <%if(value["Total"] >= 0){%>
+                <%for(let[key1, value1] of Object.entries(to_ejs[key])){%>
+                <ul class="list-group list-group-flush large" ></ul>
+                    <%if(key1 != "Total"){%>
+                        <li class="list-group-item d-flex justify-content-between align-items-center"> <%= value1[1] %> 
+                        <span class="badge badge-primary badge-pill"> <%= value1[3] %></span> </li>
+                    <% }; %>
+                </ul>
+                <% }; %>  
+            <h4>Total from  <%= key %> -  <%= value["Total"] %></h4>
+        <% }}; %>
+    </div>
+  </div>
+  <div class="row"  >
+    <div class="col" align="center" >
+      <form action="/new" method="POST">
+        <button type="submit" class="btn btn-outline-info btn-lg" id = 'b2' style="background-color:rgb(241, 237, 223);">Print Results</button>
+      </form>
+     </div>
+   <div class="col"></div>
+    <div class="col" align="center">
+        <form action="/" method="GET">
+           <button type="submit" class="btn btn-outline-info btn-lg"  style="background-color:rgb(241, 237, 223);">New Search</button> 
+        </form>
+    </div>
+  </div>
+</main>
+<footer>
+    <% include ../partials/footer %>
+</footer>
+</body>
+</html>
