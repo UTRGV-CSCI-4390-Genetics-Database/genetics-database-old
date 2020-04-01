@@ -13,7 +13,6 @@ const checkBox = function(key1){
   else{
     return false;
   }
-
 }
 var newObj = {};
 for (let [key, value] of Object.entries(data)){

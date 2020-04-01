@@ -37,6 +37,16 @@ async function read(text){
     }
 }
 
+async function readRow(text){
+    try {
+    const results = await client.query(text);
+    return results.rows;
+    }
+    catch(e){
+        return [];
+    }
+}
+
 async function connect() {
     try {
         await client.connect();
@@ -54,7 +64,7 @@ const oneRequst = function(obj){
     var temp1 = "";
     var temp2  = "";
     for (let [key, value] of Object.entries(obj)){
-        temp1 = `SELECT COUNT(*) FROM ${key} WHERE`
+        temp1 = `SELECT COUNT(*) FROM ${key} WHERE `
         var tempObj = {};
         tempObj['Total']=  -2;
         for(let[key1, value1] of Object.entries(obj[key])){
@@ -62,7 +72,7 @@ const oneRequst = function(obj){
             if(value1[0] =='text' || value1[0] =='char(1)'){
                 if(value1[1] != ''){
                 tempArr[0] = value1[1];
-                temp2 = ` ${key1} ` + "= '"+value1[1]+"'"
+                temp2 = `${key1}` + " = '"+value1[1]+"'"
                 temp = temp1+temp2;
                 request_to_db.push(temp);
                 tempArr[1]=temp2;
@@ -74,7 +84,7 @@ const oneRequst = function(obj){
             else if(value1[0] =='boolean'){
                 if(value1[1] == true){
                 tempArr[0] = value1[1];
-                temp2 = ` ${key1}` + " = true";
+                temp2 = `${key1}` + " = true";
                 temp = temp1+temp2;
                 request_to_db.push(temp);
                 tempArr[1]=temp2;
@@ -86,7 +96,7 @@ const oneRequst = function(obj){
             else if(value1[0] =='integer' || value1[0] =='smallint' || value1[0] =='real' || value1[0] =='bigint'){
                 if(value1[1] < value1[2]){
                 tempArr[0] = value1[1];
-                temp2 = ` ${key1} BETWEEN ${value1[1]} AND ${value1[2]}`;
+                temp2 = `${key1} BETWEEN ${value1[1]} AND ${value1[2]}`;
                 temp = temp1+temp2;
                 request_to_db.push(temp);
                 tempArr[1]=temp2;
@@ -99,7 +109,7 @@ const oneRequst = function(obj){
             else if(value1[0] == 'date'){
                 if(value1[1] < value1[2]){
                 tempArr[0] = value1[1];
-                temp2 = ` ${key1} BETWEEN '${value1[1]}' AND '${value1[2]}'`;
+                temp2 = `${key1} BETWEEN '${value1[1]}' AND '${value1[2]}'`;
                 temp = temp1+temp2;
                 request_to_db.push(temp);
                 tempArr[1]=temp2;
@@ -131,17 +141,16 @@ const putResultsToNewObje = function(arr, obj){
 const totalFromTabel = function(obj){
     var arr = [];
     for (let [key, value] of Object.entries(obj)){
-        console.log(value['Total'])
         var str = "";
         if(value['Total'] == -2){
-            arr.push(key)
+            arr.push("")
         }
         else{
-            str = `SELECT COUNT(*) FROM ${key} WHERE`;
+            str = `SELECT COUNT(*) FROM ${key} WHERE `;
             if(key == 'psychiatric_disorders' || key == 'medical_history'){
                 for(let[key1, value1] of Object.entries(obj[key])){
-                        if(value1[1] && value1[3]>0){
-                            str += value1[1] + " OR";
+                        if(value1[1]){
+                            str += key + "." + value1[1] + " OR ";
                         }   
                     }
                     arr.push(str.substring(0, str.length - 3));   
@@ -149,7 +158,7 @@ const totalFromTabel = function(obj){
             else{
                 for(let[key1, value1] of Object.entries(obj[key])){
                     if(value1[1]){
-                        str += value1[1] + " AND";
+                        str += key + "." + value1[1] + " AND ";
                     }
                 }
                 arr.push(str.substring(0, str.length - 4));
@@ -176,29 +185,27 @@ app.get('/', function(req, res){
 })
 
 app.post('/results', async function(req, res){
-    //connect()
     var obj = req.body.obj;
-    //console.log(JSON.parse(obj)); 
     var req_to_db = oneRequst(JSON.parse(obj)); 
+    //console.log(req_to_db);
     for(i = 0; i < req_to_db.length; i++){
         req_to_db[i] = await read(req_to_db[i]);
-       
     }
+    //console.log(newObj);
     putResultsToNewObje(req_to_db, newObj);
-    console.log(newObj);
     var r_to_db = totalFromTabel(newObj)
-    console.log(r_to_db);
-    for(i = 0; i < r_to_db.length; i++){
-        if(r_to_db[i].includes("WHERE")){
-            r_to_db[i] = await read(r_to_db[i]);
+       for(i = 0; i < r_to_db.length; i++){
+        if(r_to_db[i] != ""){
+            req_to_db[i] = await read(r_to_db[i]);
         }
         else{
-            r_to_db[i] = -7;
+            req_to_db[i] = -7;
         }
     }
-    totalFromTabelRusults(r_to_db, newObj);
-    console.log(newObj);
+    totalFromTabelRusults(req_to_db, newObj);
+    //console.log(r_to_db);
     res.render('pages/index', {
+        searchArry: r_to_db,
         to_ejs: newObj,
     });
 
@@ -206,7 +213,22 @@ app.post('/results', async function(req, res){
 app.get('/new', function(req, res){
     res.sendFile(`${__dirname}/public/new.html`);
   });
-
+const columName = function(str){
+    str = str.substring(7, str.length);
+    arr = str.split("FROM");
+    str = arr[0];
+    arr = str.split(", ");
+    return arr;
+}
+app.post('/table', async function(req, res){
+    //var query = req.body.obj;
+    query1 = "SELECT sex, name FROM individuals WHERE sex = 'M' AND is_genotyped = false"
+    //var table = await readRow(query1);
+   //console.log(table.length);
+    //console.log(table[1])
+    res.send('gotowe');
+    res.render('pages/table.ejs', {rows: table, columns: columName(query1)});  
+});
 connect()
 
 app.listen(PORT, function(){

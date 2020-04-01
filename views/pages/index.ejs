@@ -1,16 +1,22 @@
 <!-- views/pages/index.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <% include ../partials/head %>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 <main>
     <div class="container-fluid">
         <h1>Genetics Database Application</h1>
         <h3>The results </h3>
+        <h2> <%= searchArry[1] %> </h2> 
+         <ul id = "list" class = "temp">
+        <% for(i = 0; i < searchArry.length; i++){%>
+            <%if(searchArry[i] != ""){%>
+            <li> <%= searchArry[i] %> </li>
+        <%}}; %>
+        </ul>
         <% for (let [key, value] of Object.entries(to_ejs)){%>
             <div class="h-divider1"></div>  <div class="h-divider4"></div>    
             <h2 class="results"><%= key %> </h2>
@@ -26,14 +32,11 @@
                 <% }; %>  
             <h4>Total from  <%= key %> -  <%= value["Total"] %></h4>
         <% }}; %>
-    </div>
-  </div>
-  <div class="row"  >
+   
+   <div class="row"  >
     <div class="col" align="center" >
-      <form action="/new" method="POST">
-        <button type="submit" class="btn btn-outline-info btn-lg" id = 'b2' style="background-color:rgb(241, 237, 223);">Print Results</button>
-      </form>
-     </div>
+        <button class="btn btn-outline-info btn-lg" id = 'b2' style="background-color:rgb(241, 237, 223);">Print Results</button>
+    </div>
    <div class="col"></div>
     <div class="col" align="center">
         <form action="/" method="GET">
@@ -41,6 +44,23 @@
         </form>
     </div>
   </div>
+  <div class="h-divider1"></div>  <div class="h-divider4"></div>
+  <div id = "check" class="form-check temp" ><input type="checkbox" class="form-check-input" ><label class="form-check-label" >Check me out</label></div></div>
+  <div id="accordion">
+    <div class="card temp">
+      <div class="card-header" id="headingOne">
+         <button class="btn btn-outline-info btn-block btn-lg" data-toggle="collapse" data-target="#One" aria-expanded="false" aria-controls="collapseOne">
+            name </button>
+      </div>
+      <div id="One" class="collapse" aria-labelledby="headingOne" data-parent="#accordion"> <div class="card-body"> </div></div>
+    </div>
+  </div>
+  <div class="col temp" align="center" id = "fm">
+    <div class="h-divider1"></div>  <div class="h-divider4"></div>
+    <button type="button" class="btn btn-outline-info btn-lg" id = 'b'>Submit Selection</button>
+    <div class = "temp"><form id = 'form' action="/table" method="POST" ><input id = 'in' type="text" name="obj" value="" target="_blank"></form> </div>
+  </div>
+</div>
 </main>
 <footer>
     <% include ../partials/footer %>
