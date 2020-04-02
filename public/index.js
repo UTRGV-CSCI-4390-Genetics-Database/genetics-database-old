@@ -71,9 +71,11 @@ $(document).ready(function(){
         myAccord.find(".card-body").append(myText.clone());
       }
       else if(value1 == "integer" || value1 == "smallint" || value1 == 'bigint'){
-        myNumber.attr("id", key1);
-        myNumber.find('label').text(key1 + ': ');
-        myAccord.find(".card-body").append(myNumber.clone());
+        if(key1 == "subject_id" && key != "individuals"){}
+        else {
+          myNumber.attr("id", key1);
+          myNumber.find('label').text(key1 + ': ');
+          myAccord.find(".card-body").append(myNumber.clone());}
       }
       else if(value1 == "date"){
         myDate.attr("id", key1);

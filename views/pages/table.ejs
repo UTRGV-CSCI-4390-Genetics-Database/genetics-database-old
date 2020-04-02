@@ -8,14 +8,29 @@
 <body>
     <section class="home">
     <h1>Resutlts</h1>
+    <div class="h-divider1"></div>  <div class="h-divider4"></div>    
     <ul class="list-group">
         <% for(var i=0; i < rows.length; i++) {%>
             <li class="list-group-item">
-                <%= rows[i] %>
+                <%= i %>. |  <% for(var j = 0; j < columns.length; j++) {%>
+                    <%=columns[j] %> = <%= rows[i][ columns[j] ] %>  |  <% } %>
             </li>
         <% } %>
     </ul>
     </section>
+    <div class="h-divider1"></div>  <div class="h-divider4"></div>   
+    <div class="row"  >
+        <div class="col" align="center" >
+            <button class="btn btn-outline-info btn-lg" id = 'b2' style="background-color:rgb(241, 237, 223);">Save Table As</button>
+        </div>
+        <div class="col"></div>
+        <div class="col" align="center">
+            <form action="/" method="GET">
+               <button type="submit" class="btn btn-outline-info btn-lg"  style="background-color:rgb(241, 237, 223);">New Search</button> 
+            </form>
+        </div>
+    </div>
+    <div class="h-divider1"></div>  <div class="h-divider4"></div>   
 </body>
 <footer>
     <% include ../partials/footer %>
