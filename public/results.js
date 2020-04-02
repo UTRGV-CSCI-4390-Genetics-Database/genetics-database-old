@@ -32,10 +32,10 @@ const columnList = function(data){
           myAccord.find(".card-body").append(myCheckDis.clone());}
         }
       }
-    }
     $("#accordion").append(myAccord.clone());
     myAccord.find(".card-body").text("");
   }
+}
        
 var newObj = {};
 for (let [key, value] of Object.entries(data)){
