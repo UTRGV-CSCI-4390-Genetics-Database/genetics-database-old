@@ -12,8 +12,9 @@
     <ul class="list-group">
         <% for(var i=0; i < rows.length; i++) {%>
             <li class="list-group-item">
-                <%= i %>. |  <% for(var j = 0; j < columns.length; j++) {%>
-                    <%=columns[j] %> = <%= rows[i][ columns[j] ] %>  |  <% } %>
+                <%= i %>. |  
+                <% for(var j = 0; j < columns.length; j++) {%>
+                    <%=columns[j] %> = <%= rows[i][ columns[j] ] %>  | <% } %>
             </li>
         <% } %>
     </ul>

@@ -225,16 +225,13 @@ const columName = function(str){
     }
     return arr;
 }
-col = ["sex", "name"]
 app.post('/table', async function(req, res){
     var query = req.body.obj;
-    //query1 = "SELECT sex, name FROM individuals WHERE sex = 'M' AND is_genotyped = false"
     console.log(query)
     var table = await readRow(query);
     console.log(table.length);
     console.log(table[1])
-    //res.send('gotowe');
-     res.render('pages/table.ejs', {rows: table, columns: columName(query)});  
+    res.render('pages/table.ejs', {rows: table, columns: columName(query)});  
 });
 connect()
 

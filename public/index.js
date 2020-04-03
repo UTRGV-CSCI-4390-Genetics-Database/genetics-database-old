@@ -5,6 +5,10 @@ myNumber = $("#number").clone();
 myChar = $("#char").clone();
 myReal = $("#real").clone();
 myDiv = $("#myDiv").clone();
+myIncome = $("#income").clone();
+myMarital = $("#marital").clone();
+mySex = $("#mySex").clone();
+myEthinc = $("#ethnic").clone();
 myAccord = $(".card").clone();
 const checkBox = function(key1){
   if($('#'+ key1 + ':checked').val()){
@@ -65,10 +69,38 @@ $(document).ready(function(){
         myCheck.find('label').text(' -' + key1);
         myAccord.find(".card-body").append(myCheck.clone());
       }
-      else if(value1 == "text"){
+
+      /*else if(value1 == "text"){
         myText.find('input').attr("id", key1);
         myText.find('label').text(key1 + ': ');
         myAccord.find(".card-body").append(myText.clone());
+      }*/
+      else if(value1 == "text" || value1 == "char(1)"){
+        if(value1 == "text" ){
+          if(key1 == "ethnicity" || key1 == "father_ethnicity_1" || key1 == "father_ethnicity_2" || key1 == "father_ethnicity_3" || key1 == "father_ethnicity_4" || key1 == "mother_ethnicity_1" || key1 == "mother_ethnicity_2" ||key1 == "mother_ethnicity_3" ||key1 == "mother_ethnicity_4"){
+            myVar = myEthinc;
+          }
+          else if(key1 == "approximate_income"){
+            myVar = myIncome;
+          }
+          else if(key1 == "marital_status"){
+            myVar = myMarital;
+          }
+          else{
+            myVar = myText;
+          }
+        }
+        if(value1 == "char(1)"){
+          if(key1 == "sex"){
+            myVar = mySex;
+          }
+          else{
+             myVar = myChar;
+          }   
+        }
+        myVar.find('.form-control').attr("id", key1);
+        myVar.find('label').text(key1 + ': ');
+        myAccord.find(".card-body").append(myVar.clone());
       }
       else if(value1 == "integer" || value1 == "smallint" || value1 == 'bigint'){
         if(key1 == "subject_id" && key != "individuals"){}
@@ -82,11 +114,11 @@ $(document).ready(function(){
         myDate.find('label').text(key1 + ': ');
         myAccord.find(".card-body").append(myDate.clone());
       }
-      else if(value1 == "char(1)"){
+      /*else if(value1 == "char(1)"){
         myChar.find('input').attr("id", key1);
         myChar.find('label').text(key1 + ': ');
         myAccord.find(".card-body").append(myChar.clone());
-      }
+      }*/
       else if(value1 == "real"){
         myReal.attr("id", key1);
         myReal.find('label').text(key1 + ': ');
